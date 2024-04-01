@@ -1,8 +1,11 @@
-# monolith7
+# 7 Strategies for Building Majestic Monoliths
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+## Code Quality
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+## Continuous(ish) Delivery
+
+## 
+
 
 ## Running the application in dev mode
 
