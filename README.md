@@ -4,7 +4,15 @@
 
 ## Continuous(ish) Delivery
 
-## 
+## Domain Driven Design
+
+## Autonomous Data
+
+## Code to API's
+
+## Avoid Bottlenecks
+
+## Citadels and Outposts
 
 
 ## Running the application in dev mode

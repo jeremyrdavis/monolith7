@@ -1,11 +1,13 @@
 package io.arrogantprogrammer.coffeeshop.barista;
 
+import io.agroal.api.AgroalDataSource;
 import io.arrogantprogrammer.coffeeshop.barista.api.Barista;
 import io.arrogantprogrammer.coffeeshop.barista.domain.BaristaTicket;
 import io.arrogantprogrammer.coffeeshop.counter.api.OrderService;
 import io.arrogantprogrammer.coffeeshop.domain.ITEM;
 import io.arrogantprogrammer.coffeeshop.domain.TicketIn;
 import io.arrogantprogrammer.coffeeshop.domain.TicketUp;
+import io.quarkus.agroal.DataSource;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
@@ -16,6 +18,10 @@ import java.time.Instant;
 @ApplicationScoped
 public class BaristaImpl implements Barista {
     static final Logger LOGGER = LoggerFactory.getLogger(BaristaImpl.class);
+
+    @Inject
+    @DataSource("baristads")
+    AgroalDataSource dataSource;
     @Inject
     OrderService orderService;
     @Override
