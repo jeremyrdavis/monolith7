@@ -7,11 +7,15 @@ import io.arrogantprogrammer.coffeeshop.counter.domain.OrderRepository;
 import io.arrogantprogrammer.coffeeshop.domain.PlaceOrderCommand;
 import io.arrogantprogrammer.coffeeshop.domain.TicketIn;
 import io.arrogantprogrammer.coffeeshop.domain.TicketUp;
+import io.vertx.core.eventbus.EventBus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static io.arrogantprogrammer.coffeeshop.infrastructure.EventBusUtil.WEB_UPDATES;
+import static io.arrogantprogrammer.coffeeshop.infrastructure.EventBusUtil.toJson;
 
 @ApplicationScoped
 public class OrderServiceImpl implements OrderService {
@@ -23,6 +27,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Inject
     Barista barista;
+
+    @Inject
+    EventBus eventBus;
 
     @Override @Transactional
     public void orderIn(PlaceOrderCommand placeOrderCommand) {
@@ -37,6 +44,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void orderUp(TicketUp ticketUp) {
-
+        eventBus.publish(WEB_UPDATES, toJson(ticketUp));
     }
 }

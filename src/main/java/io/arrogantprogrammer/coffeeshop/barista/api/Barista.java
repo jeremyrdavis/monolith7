@@ -5,5 +5,5 @@ import io.arrogantprogrammer.coffeeshop.domain.TicketUp;
 
 public interface Barista {
 
-    public TicketUp ticketIn(TicketIn ticketIn);
+    public void ticketIn(TicketIn ticketIn);
 }
