@@ -15,6 +15,7 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.time.Instant;
 
 @ApplicationScoped
@@ -47,27 +48,29 @@ public class BaristaImpl implements Barista {
 
     @Override
     public Uni<TicketUp> remake(RemakeTicketCommand remakeTicketCommand) {
-        return Uni.createFrom().item(new TicketUp(remakeTicketCommand.ticketId(), remakeTicketCommand.item(), remakeTicketCommand.name())).onItem().transform(ticketUp -> {
-            return ticketUp;
-        });
-    }
+        return Uni
+                .createFrom()
+                .item(new TicketUp(remakeTicketCommand.ticketId(), remakeTicketCommand.item(), remakeTicketCommand.name()))
+                .onItem()
+                .delayIt().by(Duration.ofMillis(calculateDelay(remakeTicketCommand.item())));
+        };
 
     private long calculateDelay(ITEM item) {
         switch (item) {
-            case CAPPUCCINO:
-                return 10000;
             case COFFEE_BLACK:
-                return 4000;
-            case COFFEE_WITH_ROOM:
-                return 5000;
-            case ESPRESSO:
-                return 7000;
-            case ESPRESSO_DOUBLE:
-                return 14000;
-            case LATTE:
-                return 12000;
-            default:
                 return 3000;
+            case COFFEE_WITH_ROOM:
+                return 3000;
+            case CAPPUCCINO:
+                return 7000;
+            case LATTE:
+                return 7100;
+            case ESPRESSO:
+                return 5000;
+            case ESPRESSO_DOUBLE:
+                return 5100;
+            default:
+                return 4500;
         }
     }
 }

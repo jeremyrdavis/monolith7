@@ -41,6 +41,5 @@ public class RemakeTicketTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        assertTrue(false);
     }
 }

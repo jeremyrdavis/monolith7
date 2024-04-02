@@ -5,6 +5,7 @@ import io.arrogantprogrammer.coffeeshop.counter.api.OrderService;
 import io.arrogantprogrammer.coffeeshop.counter.domain.Order;
 import io.arrogantprogrammer.coffeeshop.counter.domain.OrderRepository;
 import io.arrogantprogrammer.coffeeshop.domain.*;
+import io.smallrye.mutiny.Uni;
 import io.vertx.core.eventbus.EventBus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -59,6 +60,6 @@ public class OrderServiceImpl implements OrderService {
         barista.remake(remakeTicketCommand).onItem().transform(ticketUp -> {
             LOGGER.debug("Publishing update: {}", ticketUp);
             return eventBus.publish(WEB_UPDATES, toJson(ticketUp));
-        });
+        }).await();
     }
 }
