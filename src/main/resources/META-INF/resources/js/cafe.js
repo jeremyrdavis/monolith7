@@ -236,14 +236,14 @@
         source.onmessage = function(e) {
             console.log(e);
             var state = JSON.parse(e.data);
-            if(state.status=="IN_PROGRESS")
-                $("tbody").append(line(state));
-            if(state.status=="FULFILLED"){40
+            // if(state.status=="IN_PROGRESS")
+                 $("tbody").append(line(state));
+            // if(state.status=="FULFILLED"){40
                 console.log(state);
 //              $("#"+state.itemId).replaceWith(line(state));
 //              setTimeout(cleanup(state.itemId), 15000);
                 display(state);
-            }
+//            }
         };
 
         // Loyalty toast notification
@@ -289,12 +289,13 @@
     }
 
     function line(state) {
-        var orderId = state.orderId;
-        var id = state.itemId;
+        var orderId = state.uuid;
+        var id = state.uuid;
         var product = state.item;
         var customer = state.name;
-        var status = state.status;
-        var preparedBy = state.madeBy;
+//        var status = state.status;
+        var status = "FULFILLED";
+//        var preparedBy = state.madeBy;
         /*
           if (state.item) {
               barista = state.item.preparedBy;

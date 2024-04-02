@@ -20,7 +20,9 @@ public class EventBusUtil {
         LOGGER.debug("marshalling {} to JSON", object.toString());
 
         try {
-            return objectMapper.writeValueAsString(object);
+            String json = objectMapper.writeValueAsString(object);
+            LOGGER.debug("marshalled {} to JSON: {}", object.toString(), json);
+            return json;
         } catch (JsonProcessingException e) {
             LOGGER.error(e.getMessage());
             return "{ \"error\" : \"" + e.getMessage() + "\" }";

@@ -37,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = Order.from(placeOrderCommand);
         orderRepository.persist(order);
+        LOGGER.debug("Order persisted: {}", order);
         order.getLineItems().forEach(lineItem -> {
             barista.ticketIn(new TicketIn(order.getUuid(), lineItem.getItem(), order.getName()));
         });
@@ -45,14 +46,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void orderUp(TicketUp ticketUp) {
+        LOGGER.debug("Order up: {}", ticketUp);
         eventBus.publish(WEB_UPDATES, toJson(ticketUp));
+        LOGGER.debug("Published update: {}", ticketUp);
     }
 
     public void remake(RemakeTicketCommand remakeTicketCommand) {
 
         LOGGER.debug("Remaking: {}", remakeTicketCommand);
         barista.remake(remakeTicketCommand).onItem().transform(ticketUp -> {
-            LOGGER.debug("Publishing updaate: {}", ticketUp);
+            LOGGER.debug("Publishing update: {}", ticketUp);
             return eventBus.publish(WEB_UPDATES, toJson(ticketUp));
         });
     }

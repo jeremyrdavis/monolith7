@@ -28,9 +28,12 @@ public class BaristaImpl implements Barista {
     OrderService orderService;
     @Override
     public void ticketIn(TicketIn ticketIn) {
+        LOGGER.debug("Ticket in: {}", ticketIn);
         Instant timeIn = Instant.now();
         try {
-            Thread.sleep(calculateDelay(ticketIn.item()));
+            long delayTime = calculateDelay(ticketIn.item());
+            LOGGER.debug("Delay time: {}", delayTime);
+            Thread.sleep(delayTime);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -51,14 +54,20 @@ public class BaristaImpl implements Barista {
 
     private long calculateDelay(ITEM item) {
         switch (item) {
-            case ESPRESSO:
-                return 1000;
             case CAPPUCCINO:
-                return 2000;
+                return 10000;
+            case COFFEE_BLACK:
+                return 4000;
+            case COFFEE_WITH_ROOM:
+                return 5000;
+            case ESPRESSO:
+                return 7000;
+            case ESPRESSO_DOUBLE:
+                return 14000;
             case LATTE:
-                return 3000;
+                return 12000;
             default:
-                return 0;
+                return 3000;
         }
     }
 }

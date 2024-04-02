@@ -2,6 +2,7 @@ package io.arrogantprogrammer.coffeeshop.web;
 
 import io.arrogantprogrammer.coffeeshop.counter.api.OrderService;
 import io.arrogantprogrammer.coffeeshop.domain.PlaceOrderCommand;
+import io.arrogantprogrammer.coffeeshop.domain.RemakeTicketCommand;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.POST;
@@ -25,6 +26,16 @@ public class CoffeeshopApiResource {
 
         orderService.orderIn(placeOrderCommand);
         LOGGER.debug("Order placed: {}", placeOrderCommand);
+        return Response.accepted().build();
+    }
+
+    @POST
+    @Path("/remake")
+    @Transactional
+    public Response remakeOrder(RemakeTicketCommand remakeTicketCommand) {
+
+        orderService.remake(remakeTicketCommand);
+        LOGGER.debug("Order remade: {}", remakeTicketCommand);
         return Response.accepted().build();
     }
 }
