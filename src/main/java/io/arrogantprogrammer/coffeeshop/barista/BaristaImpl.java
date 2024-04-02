@@ -5,9 +5,11 @@ import io.arrogantprogrammer.coffeeshop.barista.api.Barista;
 import io.arrogantprogrammer.coffeeshop.barista.domain.BaristaTicket;
 import io.arrogantprogrammer.coffeeshop.counter.api.OrderService;
 import io.arrogantprogrammer.coffeeshop.domain.ITEM;
+import io.arrogantprogrammer.coffeeshop.domain.RemakeTicketCommand;
 import io.arrogantprogrammer.coffeeshop.domain.TicketIn;
 import io.arrogantprogrammer.coffeeshop.domain.TicketUp;
 import io.quarkus.agroal.DataSource;
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
@@ -38,6 +40,13 @@ public class BaristaImpl implements Barista {
         baristaTicket.persist();
         LOGGER.debug("Ticket persisted: {}", baristaTicket);
         orderService.orderUp(new TicketUp(ticketIn.uuid(), ticketIn.item(),ticketIn.name()));
+    }
+
+    @Override
+    public Uni<TicketUp> remake(RemakeTicketCommand remakeTicketCommand) {
+        return Uni.createFrom().item(new TicketUp(remakeTicketCommand.ticketId(), remakeTicketCommand.item(), remakeTicketCommand.name())).onItem().transform(ticketUp -> {
+            return ticketUp;
+        });
     }
 
     private long calculateDelay(ITEM item) {

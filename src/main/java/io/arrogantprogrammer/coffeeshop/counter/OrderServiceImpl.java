@@ -5,6 +5,7 @@ import io.arrogantprogrammer.coffeeshop.counter.api.OrderService;
 import io.arrogantprogrammer.coffeeshop.counter.domain.Order;
 import io.arrogantprogrammer.coffeeshop.counter.domain.OrderRepository;
 import io.arrogantprogrammer.coffeeshop.domain.PlaceOrderCommand;
+import io.arrogantprogrammer.coffeeshop.domain.RemakeTicketCommand;
 import io.arrogantprogrammer.coffeeshop.domain.TicketIn;
 import io.arrogantprogrammer.coffeeshop.domain.TicketUp;
 import io.vertx.core.eventbus.EventBus;
@@ -45,5 +46,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void orderUp(TicketUp ticketUp) {
         eventBus.publish(WEB_UPDATES, toJson(ticketUp));
+    }
+
+    public void remake(RemakeTicketCommand remakeTicketCommand) {
+
+        LOGGER.debug("Remaking: {}", remakeTicketCommand);
+        barista.remake(remakeTicketCommand).onItem().transform(ticketUp -> {
+            LOGGER.debug("Publishing updaate: {}", ticketUp);
+            return eventBus.publish(WEB_UPDATES, toJson(ticketUp));
+        });
     }
 }
