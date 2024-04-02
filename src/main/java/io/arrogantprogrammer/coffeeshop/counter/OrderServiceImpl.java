@@ -54,6 +54,7 @@ public class OrderServiceImpl implements OrderService {
         LOGGER.debug("Published update: {}", dashboardUpdate);
     }
 
+
     public void remake(RemakeTicketCommand remakeTicketCommand) {
 
         LOGGER.debug("Remaking: {}", remakeTicketCommand);

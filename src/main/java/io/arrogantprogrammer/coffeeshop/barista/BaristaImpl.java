@@ -46,6 +46,7 @@ public class BaristaImpl implements Barista {
         orderService.orderUp(new TicketUp(ticketIn.uuid(), ticketIn.item(),ticketIn.name()));
     }
 
+
     @Override
     public Uni<TicketUp> remake(RemakeTicketCommand remakeTicketCommand) {
         return Uni

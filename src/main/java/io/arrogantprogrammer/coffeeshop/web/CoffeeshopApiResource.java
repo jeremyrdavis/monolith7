@@ -11,6 +11,8 @@ import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CompletionStage;
+
 @Path("/api")
 public class CoffeeshopApiResource {
 
@@ -38,4 +40,5 @@ public class CoffeeshopApiResource {
         LOGGER.debug("Order remade: {}", remakeTicketCommand);
         return Response.accepted().build();
     }
+
 }
