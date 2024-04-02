@@ -236,14 +236,16 @@
         source.onmessage = function(e) {
             console.log(e);
             var state = JSON.parse(e.data);
-            // if(state.status=="IN_PROGRESS")
+             if(state.status=="IN_PROGRESS")
                  $("tbody").append(line(state));
-            // if(state.status=="FULFILLED"){40
+             if(state.status=="FULFILLED"){
                 console.log(state);
 //              $("#"+state.itemId).replaceWith(line(state));
-//              setTimeout(cleanup(state.itemId), 15000);
+                 console.log($("#"+state.uuid));
+             $("#"+state.uuid).replaceWith(line(state));
+              setTimeout(cleanup(state.itemId), 15000);
                 display(state);
-//            }
+            }
         };
 
         // Loyalty toast notification
@@ -293,9 +295,8 @@
         var id = state.uuid;
         var product = state.item;
         var customer = state.name;
-//        var status = state.status;
-        var status = "FULFILLED";
-//        var preparedBy = state.madeBy;
+        var status = state.status;
+        var preparedBy = "XtremeJ";
         /*
           if (state.item) {
               barista = state.item.preparedBy;
@@ -305,7 +306,8 @@
             "<td>" + customer + "</td>" +
             "<td>" + displayFriendlyItem(product) + "</td>" +
             "<td>" + displayFriendlyStatus(status) + "</td>" +
-            "<td>" + displayFriendlyPreparedBy(preparedBy) + "</td></tr>";
+            "<td></td>"
+//            "<td>" + displayFriendlyPreparedBy(preparedBy) + "</td></tr>";
     }
 
     /* Display friendly prepared by or nothing */

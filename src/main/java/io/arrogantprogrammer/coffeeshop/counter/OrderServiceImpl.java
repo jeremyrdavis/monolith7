@@ -4,10 +4,7 @@ import io.arrogantprogrammer.coffeeshop.barista.api.Barista;
 import io.arrogantprogrammer.coffeeshop.counter.api.OrderService;
 import io.arrogantprogrammer.coffeeshop.counter.domain.Order;
 import io.arrogantprogrammer.coffeeshop.counter.domain.OrderRepository;
-import io.arrogantprogrammer.coffeeshop.domain.PlaceOrderCommand;
-import io.arrogantprogrammer.coffeeshop.domain.RemakeTicketCommand;
-import io.arrogantprogrammer.coffeeshop.domain.TicketIn;
-import io.arrogantprogrammer.coffeeshop.domain.TicketUp;
+import io.arrogantprogrammer.coffeeshop.domain.*;
 import io.vertx.core.eventbus.EventBus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -39,6 +36,10 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.persist(order);
         LOGGER.debug("Order persisted: {}", order);
         order.getLineItems().forEach(lineItem -> {
+            DashboardUpdate dashboardUpdate = new DashboardUpdate(order.getUuid(), lineItem.getItem(), order.getName(), STATUS.IN_PROGRESS);
+            eventBus.publish(WEB_UPDATES, toJson(dashboardUpdate));
+        });
+        order.getLineItems().forEach(lineItem -> {
             barista.ticketIn(new TicketIn(order.getUuid(), lineItem.getItem(), order.getName()));
         });
         LOGGER.info("Order placed: {}", order);
@@ -47,8 +48,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void orderUp(TicketUp ticketUp) {
         LOGGER.debug("Order up: {}", ticketUp);
-        eventBus.publish(WEB_UPDATES, toJson(ticketUp));
-        LOGGER.debug("Published update: {}", ticketUp);
+        DashboardUpdate dashboardUpdate = new DashboardUpdate(ticketUp.uuid(), ticketUp.item(), ticketUp.name(), STATUS.FULFILLED);
+        eventBus.publish(WEB_UPDATES, toJson(dashboardUpdate));
+        LOGGER.debug("Published update: {}", dashboardUpdate);
     }
 
     public void remake(RemakeTicketCommand remakeTicketCommand) {
